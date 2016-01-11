@@ -1,8 +1,8 @@
-<h4>Config.h</h4>
-Stores global constants for organization and easy access.
+<h5>Config.h</h5>
+Stores global constants for organization and easy access. <br/>
 
-<h4>Robot.cpp / Robot.h</h4>
-Main program. All other classes are included into here.
+<h5>Robot.cpp / Robot.h</h5>
+Main program. All other classes are included into here. <br/>
 
-<h4>Drive.cpp / Drive.h</h4>
+<h5>Drive.cpp / Drive.h</h5>
 Controlls the robot's drive train.
