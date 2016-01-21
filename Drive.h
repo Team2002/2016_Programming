@@ -11,10 +11,11 @@ public:
 	Drive(void);
 	~Drive(void);
 	
-	void SetMotors(float, float, float, float);
+	void SetMotors(float, float, float, float, bool);
 	
 private:
 	Talon *FrontLeft, *FrontRight, *BackLeft, *BackRight;
+	Encoder* o_Encoder;
 };
 
 

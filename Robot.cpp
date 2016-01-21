@@ -17,7 +17,8 @@ Robot::~Robot(void){
 
 
 void Robot::RobotInit(void){
-	
+	CameraServer::GetInstance()->SetQuality(CAMERA_QUALITY);
+	CameraServer::GetInstance()->StartAutomaticCapture("cam0");
 }
 
 
@@ -27,21 +28,16 @@ void Robot::Autonomous(void){
 
 
 void Robot::OperatorControl(void){
-	bool stop;
-	float speed;
-	float turn;
+	float speed_left;
+	float speed_right;
+	bool reverse;
 
-	while(true){
-		stop = o_Joystick->GetRawButton(JOYSTICK_BUTTON_STOP);
-		speed = -o_Joystick->GetRawAxis(JOYSTICK_AXIS_Y);
-		turn = o_Joystick->GetRawAxis(JOYSTICK_AXIS_Z);
+	while(IsOperatorControl() && IsEnabled()){
+		speed_left = -o_Joystick->GetRawAxis(JOYSTICK_AXIS_LEFT);
+		speed_right = o_Joystick->GetRawAxis(JOYSTICK_AXIS_RIGHT);
+		reverse = o_Joystick->GetRawButton(JOYSTICK_BUTTON_REVERSE);
 
-		if(!stop){
-			o_Drive->SetMotors(speed + turn, speed - turn, speed + turn, speed - turn);
-		}
-		else{
-			o_Drive->SetMotors(0, 0, 0, 0);
-		}
+		o_Drive->SetMotors(speed_left, speed_right, speed_left, speed_right, reverse);
 	}
 }
 
