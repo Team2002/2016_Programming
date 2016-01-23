@@ -15,7 +15,6 @@ public:
 	
 private:
 	Talon *FrontLeft, *FrontRight, *BackLeft, *BackRight;
-	Encoder* o_Encoder;
 };
 
 

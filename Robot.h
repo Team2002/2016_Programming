@@ -19,6 +19,12 @@ public:
 private:
 	Joystick* o_Joystick;
 	Drive* o_Drive;
+
+	NetworkTable table;
+
+	IMAQdxSession session;
+	IMAQdxError imaqError;
+	Image *frame;
 };
 
 

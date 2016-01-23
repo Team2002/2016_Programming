@@ -1,6 +1,6 @@
+#include "Drive.h"
 #include "WPILib.h"
 #include "Config.h"
-#include "Drive.h"
 
 
 Drive::Drive(){
@@ -8,10 +8,6 @@ Drive::Drive(){
 	FrontRight = new Talon(TALON_PORT_FRONTRIGHT);
 	BackLeft = new Talon(TALON_PORT_BACKLEFT);
 	BackRight = new Talon(TALON_PORT_BACKRIGHT);
-
-	o_Encoder = new Encoder(ENCODER_PORT_1, ENCODER_PORT_2, false, Encoder::k4X);
-
-	o_Encoder->Reset();
 }
 
 Drive::~Drive(){
@@ -19,26 +15,20 @@ Drive::~Drive(){
 	delete FrontRight;
 	delete BackLeft;
 	delete BackRight;
-
-	delete o_Encoder;
 }
 
 
 void Drive::SetMotors(float a, float b, float c, float d, bool reverse){
 	if(!reverse){
-		FrontLeft->Set(-a);
-		FrontRight->Set(-b);
-		BackLeft->Set(-c);
-		BackRight->Set(-d);
+		FrontLeft->Set(-a * DRIVE_MOTOR_MULTIPLIER / DRIVE_MOTOR_RATIO);
+		FrontRight->Set(-b * DRIVE_MOTOR_MULTIPLIER / DRIVE_MOTOR_RATIO);
+		BackLeft->Set(-c * DRIVE_MOTOR_MULTIPLIER);
+		BackRight->Set(-d * DRIVE_MOTOR_MULTIPLIER);
 	}
 	else{
-		FrontLeft->Set(a);
-		FrontRight->Set(b);
-		BackLeft->Set(c);
-		BackRight->Set(d);
+		FrontLeft->Set(a * DRIVE_MOTOR_MULTIPLIER / DRIVE_MOTOR_RATIO);
+		FrontRight->Set(b * DRIVE_MOTOR_MULTIPLIER / DRIVE_MOTOR_RATIO);
+		BackLeft->Set(c * DRIVE_MOTOR_MULTIPLIER);
+		BackRight->Set(d * DRIVE_MOTOR_MULTIPLIER);
 	}
-
-	SmartDashboard::PutNumber("Encoder Get: ", o_Encoder->Get());
-	SmartDashboard::PutNumber("Encoder GetRaw: ", o_Encoder->GetRaw());
-	SmartDashboard::PutNumber("Encoder GetDistance: ", o_Encoder->GetDistance());
 }
