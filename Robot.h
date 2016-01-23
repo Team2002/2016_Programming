@@ -3,6 +3,7 @@
 
 
 #include "WPILib.h"
+#include "NetworkTables/NetworkTable.h"
 #include "Config.h"
 #include "Drive.h"
 
@@ -15,16 +16,16 @@ public:
 	void RobotInit(void);
 	void Autonomous(void);
 	void OperatorControl(void);
-	
+
 private:
 	Joystick* o_Joystick;
 	Drive* o_Drive;
 
-	NetworkTable table;
-
 	IMAQdxSession session;
 	IMAQdxError imaqError;
 	Image *frame;
+
+	NetworkTable* table;
 };
 
 

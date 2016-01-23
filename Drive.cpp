@@ -18,17 +18,17 @@ Drive::~Drive(){
 }
 
 
-void Drive::SetMotors(float a, float b, float c, float d, bool reverse){
+void Drive::SetMotors(float left_speed, float right_speed, bool reverse){
 	if(!reverse){
-		FrontLeft->Set(-a * DRIVE_MOTOR_MULTIPLIER / DRIVE_MOTOR_RATIO);
-		FrontRight->Set(-b * DRIVE_MOTOR_MULTIPLIER / DRIVE_MOTOR_RATIO);
-		BackLeft->Set(-c * DRIVE_MOTOR_MULTIPLIER);
-		BackRight->Set(-d * DRIVE_MOTOR_MULTIPLIER);
+		TALON_REVERSED_FRONTLEFT ? FrontLeft->Set(-left_speed) : FrontLeft->Set(left_speed);
+		TALON_REVERSED_FRONTRIGHT ? FrontRight->Set(-right_speed) : FrontRight->Set(right_speed);
+		TALON_REVERSED_BACKLEFT ? BackLeft->Set(-left_speed) : BackLeft->Set(left_speed);
+		TALON_REVERSED_BACKRIGHT ? BackRight->Set(-right_speed) : BackRight->Set(right_speed);
 	}
 	else{
-		FrontLeft->Set(a * DRIVE_MOTOR_MULTIPLIER / DRIVE_MOTOR_RATIO);
-		FrontRight->Set(b * DRIVE_MOTOR_MULTIPLIER / DRIVE_MOTOR_RATIO);
-		BackLeft->Set(c * DRIVE_MOTOR_MULTIPLIER);
-		BackRight->Set(d * DRIVE_MOTOR_MULTIPLIER);
+		TALON_REVERSED_FRONTLEFT ? FrontLeft->Set(left_speed) : FrontLeft->Set(-left_speed);
+		TALON_REVERSED_FRONTRIGHT ? FrontRight->Set(right_speed) : FrontRight->Set(-right_speed);
+		TALON_REVERSED_BACKLEFT ? BackLeft->Set(left_speed) : BackLeft->Set(-left_speed);
+		TALON_REVERSED_BACKRIGHT ? BackRight->Set(right_speed) : BackRight->Set(-right_speed);
 	}
 }

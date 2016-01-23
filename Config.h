@@ -8,17 +8,19 @@ const int JOYSTICK_PORT = 0;
 
 const int TALON_PORT_FRONTLEFT = 0;
 const int TALON_PORT_FRONTRIGHT = 1;
-const int TALON_PORT_BACKLEFT = 6;
-const int TALON_PORT_BACKRIGHT = 2;
+const int TALON_PORT_BACKLEFT = 2;
+const int TALON_PORT_BACKRIGHT = 6;
+
+const bool TALON_REVERSED_FRONTLEFT = true;
+const bool TALON_REVERSED_FRONTRIGHT = false;
+const bool TALON_REVERSED_BACKLEFT = true;
+const bool TALON_REVERSED_BACKRIGHT = false;
 
 const int JOYSTICK_AXIS_LEFT = 1;
 const int JOYSTICK_AXIS_RIGHT = 3;
 const int JOYSTICK_BUTTON_REVERSE = 7;
+const int JOYSTICK_BUTTON_TRACK_TARGET = 8;
 
-const float DRIVE_MOTOR_MULTIPLIER = 1;
-const float DRIVE_MOTOR_RATIO = 1.5;
-
-const int CAMERA_QUALITY = 50;
 const char CAMERA_NAME[] = "cam0\0";
 
 
