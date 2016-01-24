@@ -7,5 +7,5 @@ Main program. All other classes are included into here.<br/>
 <strong>Drive.cpp / Drive.h</strong><br/>
 Controls the robot's drive train.<br/>
 
-<strong>target_tracking.robo</strong><br/>
+<strong>target_tracker.robo</strong><br/>
 RoboRealm configuration for tracking the castle high goal.
