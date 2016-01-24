@@ -18,6 +18,8 @@ public:
 	void OperatorControl(void);
 
 private:
+	void CaptureImage(void);
+
 	Joystick* o_Joystick;
 	Drive* o_Drive;
 

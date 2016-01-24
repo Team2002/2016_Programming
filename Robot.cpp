@@ -41,50 +41,76 @@ void Robot::Autonomous(void){
 void Robot::OperatorControl(void){
 	float speed_left;
 	float speed_right;
-	bool reverse;
-
-	const int RES_X = 640;
-	const int CENTERED_THRESHOLD = 50;
-	const float SPEED = 1;
-
 	std::vector<double> coord;
 
 	IMAQdxStartAcquisition(session);
 
 	while(IsOperatorControl() && IsEnabled()){
-		IMAQdxGrab(session, frame, true, NULL);
-		if(imaqError != IMAQdxErrorSuccess) {
-			DriverStation::ReportError("IMAQdxGrab error: " + std::to_string((long)imaqError) + "\n");
-		}else{
-			CameraServer::GetInstance()->SetImage(frame);
-		}
+		CaptureImage();
 
 		if(o_Joystick->GetRawButton(JOYSTICK_BUTTON_TRACK_TARGET)){
-			coord = table->GetNumberArray("BLOBS", 0);
+				coord = table->GetNumberArray("BLOBS", std::vector<double>());
 
-			SmartDashboard::PutNumber("BLOB X: ", coord[0]);
-			SmartDashboard::PutNumber("BLOB Y: ", coord[1]);
+				if(!coord.empty()){
+					while(true){
+						CaptureImage();
 
-			if(coord[0] < (RES_X / 2) - CENTERED_THRESHOLD){
-				SmartDashboard::PutString("TURN DIRECTION:  ", "Left");
-				o_Drive->SetMotors(-SPEED, SPEED, false);
-			}else if(coord[0] > (RES_X / 2) + CENTERED_THRESHOLD){
-				SmartDashboard::PutString("TURN DIRECTION:  ", "Right");
-				o_Drive->SetMotors(SPEED, -SPEED, false);
-			}else{
-				SmartDashboard::PutString("TURN DIRECTION:  ", "Centered");
-				o_Drive->SetMotors(0, 0, false);
-			}
+						if(coord[0] < (RES_X / 2) - CENTERED_THRESHOLD){
+							o_Drive->SetMotors(-SPEED_TURN, SPEED_TURN);
+						}else if(coord[0] > (RES_X / 2) + CENTERED_THRESHOLD){
+							o_Drive->SetMotors(SPEED_TURN, -SPEED_TURN);
+						}else{
+							o_Drive->StopMotors();
+							break;
+						}
+
+						if(o_Joystick->GetRawButton(JOYSTICK_BUTTON_TRACK_TARGET_ESTOP))
+							break;
+
+						Wait(CYCLE_TIME_DELAY);
+					}
+
+					while(true){
+						CaptureImage();
+
+						if(coord[1] < (RES_Y / 2) - CENTERED_THRESHOLD){
+							o_Drive->SetMotors(SPEED_STRAIGHT, SPEED_STRAIGHT);
+						}else if(coord[1] > (RES_Y / 2) + CENTERED_THRESHOLD){
+							o_Drive->SetMotors(-SPEED_STRAIGHT, -SPEED_STRAIGHT);
+						}else{
+							o_Drive->StopMotors();
+							break;
+						}
+
+						if(o_Joystick->GetRawButton(JOYSTICK_BUTTON_TRACK_TARGET_ESTOP))
+							break;
+
+						Wait(CYCLE_TIME_DELAY);
+					}
+				}else{
+					o_Drive->StopMotors();
+				}
 		}else{
 			speed_left = -o_Joystick->GetRawAxis(JOYSTICK_AXIS_LEFT);
 			speed_right = -o_Joystick->GetRawAxis(JOYSTICK_AXIS_RIGHT);
-			reverse = o_Joystick->GetRawButton(JOYSTICK_BUTTON_REVERSE);
 
-			o_Drive->SetMotors(speed_left, speed_right, reverse);
+			o_Drive->SetMotors(speed_left, speed_right);
 		}
+
 		Wait(CYCLE_TIME_DELAY);
 	}
+
 	IMAQdxStopAcquisition(session);
+}
+
+
+void Robot::CaptureImage(void){
+	IMAQdxGrab(session, frame, true, NULL);
+	if(imaqError != IMAQdxErrorSuccess) {
+		DriverStation::ReportError("IMAQdxGrab error: " + std::to_string((long)imaqError) + "\n");
+	}else{
+		CameraServer::GetInstance()->SetImage(frame);
+	}
 }
 
 

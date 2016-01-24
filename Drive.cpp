@@ -18,17 +18,16 @@ Drive::~Drive(){
 }
 
 
-void Drive::SetMotors(float left_speed, float right_speed, bool reverse){
-	if(!reverse){
-		TALON_REVERSED_FRONTLEFT ? FrontLeft->Set(-left_speed) : FrontLeft->Set(left_speed);
-		TALON_REVERSED_FRONTRIGHT ? FrontRight->Set(-right_speed) : FrontRight->Set(right_speed);
-		TALON_REVERSED_BACKLEFT ? BackLeft->Set(-left_speed) : BackLeft->Set(left_speed);
-		TALON_REVERSED_BACKRIGHT ? BackRight->Set(-right_speed) : BackRight->Set(right_speed);
-	}
-	else{
-		TALON_REVERSED_FRONTLEFT ? FrontLeft->Set(left_speed) : FrontLeft->Set(-left_speed);
-		TALON_REVERSED_FRONTRIGHT ? FrontRight->Set(right_speed) : FrontRight->Set(-right_speed);
-		TALON_REVERSED_BACKLEFT ? BackLeft->Set(left_speed) : BackLeft->Set(-left_speed);
-		TALON_REVERSED_BACKRIGHT ? BackRight->Set(right_speed) : BackRight->Set(-right_speed);
-	}
+void Drive::SetMotors(float left_speed, float right_speed){
+	TALON_REVERSED_FRONTLEFT ? FrontLeft->Set(-left_speed) : FrontLeft->Set(left_speed);
+	TALON_REVERSED_FRONTRIGHT ? FrontRight->Set(-right_speed) : FrontRight->Set(right_speed);
+	TALON_REVERSED_BACKLEFT ? BackLeft->Set(-left_speed) : BackLeft->Set(left_speed);
+	TALON_REVERSED_BACKRIGHT ? BackRight->Set(-right_speed) : BackRight->Set(right_speed);
+}
+
+void Drive::StopMotors(){
+	FrontLeft->Set(0);
+	FrontRight->Set(0);
+	BackLeft->Set(0);
+	BackRight->Set(0);
 }

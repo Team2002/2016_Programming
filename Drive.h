@@ -11,7 +11,8 @@ public:
 	Drive(void);
 	~Drive(void);
 	
-	void SetMotors(float, float, bool);
+	void SetMotors(float, float);
+	void StopMotors(void);
 	
 private:
 	Talon *FrontLeft, *FrontRight, *BackLeft, *BackRight;
