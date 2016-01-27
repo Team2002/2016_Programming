@@ -3,14 +3,14 @@
 #include "Config.h"
 
 
-Drive::Drive(){
+Drive::Drive(void){
 	FrontLeft = new Talon(TALON_PORT_FRONTLEFT);
 	FrontRight = new Talon(TALON_PORT_FRONTRIGHT);
 	BackLeft = new Talon(TALON_PORT_BACKLEFT);
 	BackRight = new Talon(TALON_PORT_BACKRIGHT);
 }
 
-Drive::~Drive(){
+Drive::~Drive(void){
 	delete FrontLeft;
 	delete FrontRight;
 	delete BackLeft;
@@ -25,7 +25,7 @@ void Drive::SetMotors(float left_speed, float right_speed){
 	TALON_REVERSED_BACKRIGHT ? BackRight->Set(-right_speed) : BackRight->Set(right_speed);
 }
 
-void Drive::StopMotors(){
+void Drive::StopMotors(void){
 	FrontLeft->Set(0);
 	FrontRight->Set(0);
 	BackLeft->Set(0);

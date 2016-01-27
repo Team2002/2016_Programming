@@ -17,6 +17,15 @@
 </Adaptive_Threshold>
 <Color_Threshold>
   <blue_end>255</blue_end>
+  <blue_start>255</blue_start>
+  <green_end>255</green_end>
+  <green_start>255</green_start>
+  <red_end>255</red_end>
+  <red_start>255</red_start>
+  <result_type>3</result_type>
+</Color_Threshold>
+<Color_Threshold>
+  <blue_end>255</blue_end>
   <blue_start>80</blue_start>
   <green_end>255</green_end>
   <green_start>80</green_start>

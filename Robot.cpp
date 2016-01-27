@@ -10,7 +10,7 @@ Robot::Robot(void){
 	o_Drive = new Drive();
 
 	frame = imaqCreateImage(IMAQ_IMAGE_RGB, 0);
-	imaqError = IMAQdxOpenCamera(CAMERA_NAME, IMAQdxCameraControlModeController, &session);
+	IMAQdxOpenCamera(CAMERA_NAME, IMAQdxCameraControlModeController, &session);
 
 	table = &*NetworkTable::GetTable("datatable");
 }
@@ -33,73 +33,60 @@ void Robot::RobotInit(void){
 }
 
 
-void Robot::Autonomous(void){
-
-}
+void Robot::Autonomous(void){}
 
 
 void Robot::OperatorControl(void){
-	float speed_left;
-	float speed_right;
-	std::vector<double> coord;
+	float speed_left, speed_right; // Motor speeds
+	std::vector<double> coord;     // Target coordinates sent from RoboRealm
 
+	// Start camera
 	IMAQdxStartAcquisition(session);
 
+	// Continue updating robot while in tele-op mode
 	while(IsOperatorControl() && IsEnabled()){
+
+		// Capture, process, and send an image to the driver station
 		CaptureImage();
 
+		// Autonomous target tracking
 		if(o_Joystick->GetRawButton(JOYSTICK_BUTTON_TRACK_TARGET)){
-				coord = table->GetNumberArray("BLOBS", std::vector<double>());
+			coord = table->GetNumberArray("BLOBS", std::vector<double>());
+			if(!coord.empty()){
 
-				if(!coord.empty()){
-					while(true){
-						CaptureImage();
+				// First correct robot orientation (x axis on image)
+				if(coord[0] < (RES_X / 2) - CENTERED_THRESHOLD)
+					o_Drive->SetMotors(-SPEED_ROTATION, SPEED_ROTATION);
+				else if(coord[0] > (RES_X / 2) + CENTERED_THRESHOLD)
+					o_Drive->SetMotors(SPEED_ROTATION, -SPEED_ROTATION);
+				else{
 
-						if(coord[0] < (RES_X / 2) - CENTERED_THRESHOLD){
-							o_Drive->SetMotors(-SPEED_TURN, SPEED_TURN);
-						}else if(coord[0] > (RES_X / 2) + CENTERED_THRESHOLD){
-							o_Drive->SetMotors(SPEED_TURN, -SPEED_TURN);
-						}else{
-							o_Drive->StopMotors();
-							break;
-						}
-
-						if(o_Joystick->GetRawButton(JOYSTICK_BUTTON_TRACK_TARGET_ESTOP))
-							break;
-
-						Wait(CYCLE_TIME_DELAY);
-					}
-
-					while(true){
-						CaptureImage();
-
-						if(coord[1] < (RES_Y / 2) - CENTERED_THRESHOLD){
-							o_Drive->SetMotors(SPEED_STRAIGHT, SPEED_STRAIGHT);
-						}else if(coord[1] > (RES_Y / 2) + CENTERED_THRESHOLD){
-							o_Drive->SetMotors(-SPEED_STRAIGHT, -SPEED_STRAIGHT);
-						}else{
-							o_Drive->StopMotors();
-							break;
-						}
-
-						if(o_Joystick->GetRawButton(JOYSTICK_BUTTON_TRACK_TARGET_ESTOP))
-							break;
-
-						Wait(CYCLE_TIME_DELAY);
-					}
-				}else{
-					o_Drive->StopMotors();
+					// ...then correct robot distance to target (y axis)
+					if(coord[1] < (RES_Y / 2) - CENTERED_THRESHOLD)
+						o_Drive->SetMotors(SPEED_LINEAR, SPEED_LINEAR);
+					else if(coord[1] > (RES_Y / 2) + CENTERED_THRESHOLD)
+						o_Drive->SetMotors(-SPEED_LINEAR, -SPEED_LINEAR);
+					else
+						o_Drive->StopMotors();
 				}
-		}else{
+			}
+			else
+				o_Drive->StopMotors();
+		}
+
+		// Manual driver control
+		else{
 			speed_left = -o_Joystick->GetRawAxis(JOYSTICK_AXIS_LEFT);
 			speed_right = -o_Joystick->GetRawAxis(JOYSTICK_AXIS_RIGHT);
 
 			o_Drive->SetMotors(speed_left, speed_right);
 		}
 
+		// Wait until next cycle
 		Wait(CYCLE_TIME_DELAY);
 	}
 
+	// Stop camera
 	IMAQdxStopAcquisition(session);
 }
 
