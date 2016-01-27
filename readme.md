@@ -8,4 +8,7 @@ Main program. All other classes are included into here.<br/>
 Controls the robot's drive train.<br/>
 
 <strong>target_tracker.robo</strong><br/>
-RoboRealm configuration for tracking the castle high goal.
+RoboRealm configuration for tracking the castle high goal.<br/>
+
+<strong>Vision Tracking Test Images</strong><br/>
+A few images of the castle high goal under different lighting conditions, for RoboRealm testing.

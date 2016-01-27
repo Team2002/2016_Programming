@@ -24,8 +24,8 @@ const char CAMERA_NAME[] = "cam0\0";          // Camera name (found in RoboRio w
 const int RES_X = 640;                        // Camera x resolution used in RoboRealm
 const int RES_Y = 480;                        // Camera y resolution used in RoboRealm
 const int CENTERED_THRESHOLD = 50;            // Threshold for considering the target centered
-const float SPEED_ROTATION = 0.65;             // Turning speed when centering target (on x coordinate)
-const float SPEED_LINEAR = 0.2;              // Linear speed when centering target (on y coordinate)
+const float SPEED_ROTATION = 0.65;            // Turning speed when centering target (on x coordinate)
+const float SPEED_LINEAR = 0.20;              // Linear speed when centering target (on y coordinate)
 
 
 #endif /* CONFIG_H__INCLUDED */

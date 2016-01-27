@@ -37,7 +37,7 @@ void Robot::Autonomous(void){}
 
 
 void Robot::OperatorControl(void){
-	float speed_left, speed_right; // Motor speeds
+	float speed_left, speed_right; // Drive motor speeds
 	std::vector<double> coord;     // Target coordinates sent from RoboRealm
 
 	// Start camera
@@ -46,28 +46,33 @@ void Robot::OperatorControl(void){
 	// Continue updating robot while in tele-op mode
 	while(IsOperatorControl() && IsEnabled()){
 
-		// Capture, process, and send an image to the driver station
+		// Capture and process an image
 		CaptureImage();
 
 		// Autonomous target tracking
 		if(o_Joystick->GetRawButton(JOYSTICK_BUTTON_TRACK_TARGET)){
+
+			// Get targets coordinates from the network table (return empty vector if network table fails)
 			coord = table->GetNumberArray("BLOBS", std::vector<double>());
+
+			// Make sure the network table returned values
 			if(!coord.empty()){
 
-				// First correct robot orientation (x axis on image)
+				// First correct robot orientation (x axis on image)...
 				if(coord[0] < (RES_X / 2) - CENTERED_THRESHOLD)
 					o_Drive->SetMotors(-SPEED_ROTATION, SPEED_ROTATION);
 				else if(coord[0] > (RES_X / 2) + CENTERED_THRESHOLD)
 					o_Drive->SetMotors(SPEED_ROTATION, -SPEED_ROTATION);
 				else{
 
-					// ...then correct robot distance to target (y axis)
+					// ...then correct robot distance to target (y axis on image)
 					if(coord[1] < (RES_Y / 2) - CENTERED_THRESHOLD)
 						o_Drive->SetMotors(SPEED_LINEAR, SPEED_LINEAR);
 					else if(coord[1] > (RES_Y / 2) + CENTERED_THRESHOLD)
 						o_Drive->SetMotors(-SPEED_LINEAR, -SPEED_LINEAR);
 					else
 						o_Drive->StopMotors();
+						// Launch boulder
 				}
 			}
 			else
@@ -82,7 +87,7 @@ void Robot::OperatorControl(void){
 			o_Drive->SetMotors(speed_left, speed_right);
 		}
 
-		// Wait until next cycle
+		// Wait until next cycle (to prevent needless CPU usage)
 		Wait(CYCLE_TIME_DELAY);
 	}
 

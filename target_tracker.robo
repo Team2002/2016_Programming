@@ -5,33 +5,37 @@
   <fps>10</fps>
   <port>1180</port>
   <resolution>0</resolution>
-  <running>0</running>
+  <running>1</running>
 </FRC_CameraClient>
+<Color_Threshold>
+  <blue_end>255</blue_end>
+  <blue_start>253</blue_start>
+  <green_end>255</green_end>
+  <green_start>253</green_start>
+  <red_end>255</red_end>
+  <red_start>253</red_start>
+  <result_type>3</result_type>
+</Color_Threshold>
+<Intensity>
+  <adjust_mode>1</adjust_mode>
+  <amount>-150</amount>
+  <noise_threshold>20</noise_threshold>
+</Intensity>
+<Intensity>
+  <amount>-150</amount>
+  <noise_threshold>20</noise_threshold>
+</Intensity>
+<Contrast>
+  <amount>-30</amount>
+  <auto_adjust>FALSE</auto_adjust>
+</Contrast>
 <Adaptive_Threshold>
   <channel_type>1</channel_type>
   <filter_size>80</filter_size>
   <max_threshold>255</max_threshold>
   <mean_offset>-20</mean_offset>
   <min_threshold>50</min_threshold>
-  <result_type>2</result_type>
 </Adaptive_Threshold>
-<Color_Threshold>
-  <blue_end>255</blue_end>
-  <blue_start>255</blue_start>
-  <green_end>255</green_end>
-  <green_start>255</green_start>
-  <red_end>255</red_end>
-  <red_start>255</red_start>
-  <result_type>3</result_type>
-</Color_Threshold>
-<Color_Threshold>
-  <blue_end>255</blue_end>
-  <blue_start>80</blue_start>
-  <green_end>255</green_end>
-  <green_start>80</green_start>
-  <red_end>255</red_end>
-  <red_start>0</red_start>
-</Color_Threshold>
 <Blob_Filter>
   <create_blob_array_variable>FALSE</create_blob_array_variable>
   <filters>
@@ -123,8 +127,8 @@
   <sort_array_on_y>FALSE</sort_array_on_y>
 </Blob_Filter>
 <Blob_Replace>
-  <color_index>8</color_index>
-  <fill_shape>TRUE</fill_shape>
+  <color_index>5</color_index>
+  <fill_shape>FALSE</fill_shape>
   <order_array_on_x>FALSE</order_array_on_x>
   <order_array_on_y>FALSE</order_array_on_y>
   <overlay_image>Source</overlay_image>
