@@ -14,6 +14,7 @@ public:
 	~Robot(void);
 
 	void RobotInit(void);
+	void Test(void);
 	void Autonomous(void);
 	void OperatorControl(void);
 

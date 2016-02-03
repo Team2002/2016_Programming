@@ -32,6 +32,28 @@ void Robot::RobotInit(void){
 	}
 }
 
+void Robot::Test(void){
+	while(IsTest() && IsEnabled()){
+		// Test front left motor
+		o_Drive->SetMotors(TEST_SPEED, 0, 0, 0);
+		Wait(TEST_LENGTH);
+
+		// Test front right motor
+		o_Drive->SetMotors(0, TEST_SPEED, 0, 0);
+		Wait(TEST_LENGTH);
+
+		// Test back left motor
+		o_Drive->SetMotors(0, 0, TEST_SPEED, 0);
+		Wait(TEST_LENGTH);
+
+		// Test back right motor
+		o_Drive->SetMotors(0, 0, 0, TEST_SPEED);
+		Wait(TEST_LENGTH);
+	}
+
+	o_Drive->SetMotors(0, 0);
+}
+
 
 void Robot::Autonomous(void){}
 
@@ -47,7 +69,12 @@ void Robot::OperatorControl(void){
 	while(IsOperatorControl() && IsEnabled()){
 
 		// Capture and process an image
-		CaptureImage();
+		IMAQdxGrab(session, frame, true, NULL);
+		if(imaqError != IMAQdxErrorSuccess) {
+			DriverStation::ReportError("IMAQdxGrab error: " + std::to_string((long)imaqError) + "\n");
+		}else{
+			CameraServer::GetInstance()->SetImage(frame);
+		}
 
 		// Autonomous target tracking
 		if(o_Joystick->GetRawButton(JOYSTICK_BUTTON_TRACK_TARGET)){
@@ -72,7 +99,7 @@ void Robot::OperatorControl(void){
 						o_Drive->SetMotors(-SPEED_LINEAR, -SPEED_LINEAR);
 					else
 						o_Drive->StopMotors();
-						// Launch boulder
+						// LAUNCH BOULDER
 				}
 			}
 			else
@@ -93,16 +120,6 @@ void Robot::OperatorControl(void){
 
 	// Stop camera
 	IMAQdxStopAcquisition(session);
-}
-
-
-void Robot::CaptureImage(void){
-	IMAQdxGrab(session, frame, true, NULL);
-	if(imaqError != IMAQdxErrorSuccess) {
-		DriverStation::ReportError("IMAQdxGrab error: " + std::to_string((long)imaqError) + "\n");
-	}else{
-		CameraServer::GetInstance()->SetImage(frame);
-	}
 }
 
 

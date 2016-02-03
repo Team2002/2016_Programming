@@ -12,6 +12,7 @@ public:
 	~Drive(void);
 	
 	void SetMotors(float, float);
+	void SetMotors(float, float, float, float);
 	void StopMotors(void);
 	
 private:
