@@ -1,33 +1,20 @@
-<head><version>2.79.15</version></head>
+<head><version>2.79.21</version></head>
 <FRC_CameraClient>
-  <address>192.168.1.147</address>
+  <address>10.20.2.101</address>
   <compression>5</compression>
+  <enable_logging>0</enable_logging>
   <fps>10</fps>
   <port>1180</port>
   <resolution>0</resolution>
-  <running>0</running>
+  <running>1</running>
 </FRC_CameraClient>
-<Intensity>
-  <adjust_mode>1</adjust_mode>
-  <amount>-150</amount>
-  <noise_threshold>20</noise_threshold>
-</Intensity>
-<Intensity>
-  <amount>-50</amount>
-  <noise_threshold>20</noise_threshold>
-</Intensity>
-<Contrast>
-  <amount>-50</amount>
-  <auto_adjust>FALSE</auto_adjust>
-</Contrast>
-<Color_Threshold>
-  <blue_end>255</blue_end>
-  <blue_start>75</blue_start>
-  <green_end>255</green_end>
-  <green_start>75</green_start>
-  <red_end>75</red_end>
-  <red_start>0</red_start>
-</Color_Threshold>
+<Adaptive_Threshold>
+  <channel_type>1</channel_type>
+  <filter_size>100</filter_size>
+  <max_threshold>255</max_threshold>
+  <mean_offset>-50</mean_offset>
+  <min_threshold>50</min_threshold>
+</Adaptive_Threshold>
 <Blob_Filter>
   <create_blob_array_variable>FALSE</create_blob_array_variable>
   <filters>
@@ -38,7 +25,7 @@
         <filter_id>8</filter_id>
         <invert_count>0</invert_count>
         <invert_threshold>0</invert_threshold>
-        <minimum_size>200</minimum_size>
+        <minimum_size>150</minimum_size>
         <weight_threshold>0.5</weight_threshold>
       </filter>
     </tab>
@@ -78,7 +65,7 @@
         <filter_id>8</filter_id>
         <invert_count>0</invert_count>
         <invert_threshold>0</invert_threshold>
-        <minimum_size>100</minimum_size>
+        <minimum_size>150</minimum_size>
         <weight_threshold>0.5</weight_threshold>
       </filter>
       <filter:2>
@@ -119,17 +106,17 @@
   <sort_array_on_y>FALSE</sort_array_on_y>
 </Blob_Filter>
 <Blob_Replace>
-  <color_index>8</color_index>
+  <color_index>5</color_index>
   <fill_shape>FALSE</fill_shape>
   <order_array_on_x>FALSE</order_array_on_x>
   <order_array_on_y>FALSE</order_array_on_y>
   <overlay_image>Source</overlay_image>
-  <thickness>3</thickness>
+  <thickness>5</thickness>
 </Blob_Replace>
 <NetworkTables>
   <delay>100</delay>
   <filter_type_index>0</filter_type_index>
-  <hostname>192.168.1.147</hostname>
+  <hostname>10.20.2.101</hostname>
   <port>1735</port>
   <prefix>/SmartDashboard/</prefix>
   <variables_to_send>BLOBS</variables_to_send>

@@ -1,0 +1,33 @@
+<xml version="1.0">
+<dashboard>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="1250" y="25"/>
+		<width>75</width>
+		<height>475</height>
+		<property name="Text" value="CONNECTION"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="1250" y="25"/>
+		<width>75</width>
+		<height>475</height>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.WebcamViewerExtension">
+		<location x="425" y="25"/>
+		<width>475</width>
+		<height>475</height>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="25" y="25"/>
+		<width>75</width>
+		<height>475</height>
+		<property name="Text" value="CONNECTION"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="25" y="25"/>
+		<width>75</width>
+		<height>475</height>
+	</static-widget>
+</dashboard>
+<live-window>
+</live-window>
+</xml>

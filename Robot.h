@@ -19,15 +19,14 @@ public:
 	void OperatorControl(void);
 
 private:
-	void CaptureImage(void);
+	void ToggleBool(bool, bool&, bool&);
 
 	Joystick* o_Joystick;
 	Drive* o_Drive;
 
-	IMAQdxSession session;
-	IMAQdxError imaqError;
-	Image *frame;
-
+	// For vision tracking
+	USBCamera *o_USBCamera;
+	Image *o_Image;
 	NetworkTable* table;
 };
 

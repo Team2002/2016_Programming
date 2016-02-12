@@ -10,6 +10,7 @@ Drive::Drive(void){
 	BackRight = new Talon(TALON_PORT_BACKRIGHT);
 }
 
+
 Drive::~Drive(void){
 	delete FrontLeft;
 	delete FrontRight;
@@ -31,6 +32,7 @@ void Drive::SetMotors(float front_left, float front_right, float back_left, floa
 	TALON_REVERSED_BACKLEFT ? BackLeft->Set(-back_left) : BackLeft->Set(back_left);
 	TALON_REVERSED_BACKRIGHT ? BackRight->Set(-back_right) : BackRight->Set(back_right);
 }
+
 
 void Drive::StopMotors(void){
 	FrontLeft->Set(0);

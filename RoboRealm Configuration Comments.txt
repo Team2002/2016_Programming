@@ -1,0 +1,16 @@
+1. FRC_CameraClient
+	Gets the images off of the RoboRio over the network.
+2. Adaptive_Threshold
+	Turns image into a binary black and white image based on relative pixel intensity.
+3. Marker
+	Sets a checkpoint here for use in the Math module.
+4. Convex Hull
+	Fills each blob with its convex.
+5. Math Subtract
+	Subtracts the image from before the Convex Hull module with the image after it. This filters out objects which were already convex.
+6. Blob Filter
+	 Filters out blobs further to narrow down which could be the target. After filtering, it removes all blobs except the largest one.
+7. Blob_Replace
+	 Replaces the one remaining blob with a box, and displays that box over the source image.
+8. Network_Tables
+	 Sends the blob's coordinates to the RoboRio.
