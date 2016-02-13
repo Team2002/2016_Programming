@@ -7,6 +7,10 @@ Main program. All other classes are included into here.<br/>
 <strong>Drive.cpp / Drive.h</strong><br/>
 Controls the robot's drive train.<br/>
 
+<strong>Catapult.cpp / Catapult.h</strong><br/>
+Controls the robot's catapult and intake mechanism.<br/>
+<br/>
+
 <strong>RoboRealm Configuration</strong><br/>
 RoboRealm pipeline for tracking the castle high goal.<br/>
 

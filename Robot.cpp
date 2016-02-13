@@ -63,6 +63,9 @@ void Robot::OperatorControl(void){
 	bool reverse_button_pressed = false; // Needed for toggling reverse mode
 	std::vector<double> coord;           // Target coordinates sent from RoboRealm
 
+	// Update camera settings
+	o_USBCamera->UpdateSettings();
+
 	// Start camera
 	o_USBCamera->OpenCamera();
 	o_USBCamera->StartCapture();
@@ -80,12 +83,12 @@ void Robot::OperatorControl(void){
 			// Get targets coordinates from the network table (return empty vector if network table is unreachable)
 			coord = table->GetNumberArray("BLOBS", std::vector<double>());
 
-			// Calculate motor speeds
-			speed_turn = std::max(fabs((TARGET_X - coord[0]) / CAMERA_RES_X), MIN_SPEED_TURN);
-			speed_linear = std::max(fabs((TARGET_Y - coord[1]) / CAMERA_RES_Y), MIN_SPEED_LINEAR);
-
 			// Make sure the network table returned values
 			if(!coord.empty()){
+
+				// Calculate motor speeds
+				speed_turn = std::max(fabs((TARGET_X - coord[0]) / CAMERA_RES_X), MIN_SPEED_TURN);
+				speed_linear = std::max(fabs((TARGET_Y - coord[1]) / CAMERA_RES_Y), MIN_SPEED_LINEAR);
 
 				// First correct robot orientation (x axis on image)...
 				if(coord[0] < TARGET_X - (CENTERED_THRESHOLD * CAMERA_RES_X))
@@ -120,8 +123,12 @@ void Robot::OperatorControl(void){
 			// Reverse mode toggling
 			ToggleBool(o_Joystick->GetRawButton(JOYSTICK_BUTTON_REVERSE), reverse_button_pressed, reverse);
 
+			// Turn locking
+			if(o_Joystick->GetRawButton(JOYSTICK_BUTTON_LOCK_TURNING))
+				speed_left = speed_right;
+
 			// Set drive motors
-			if((speed_left < 0 && speed_right < 0) || (speed_left > 0 && speed_right > 0)) // Turn off front motors if robot is doing a point turn
+			if((speed_left <= 0 && speed_right <= 0) || (speed_left >= 0 && speed_right >= 0)) // Turn off front motors if robot is doing a point turn
 				reverse ? o_Drive->SetMotors(-speed_right, -speed_left) : o_Drive->SetMotors(speed_left, speed_right);
 			else
 				reverse ? o_Drive->SetMotors(0, 0, -speed_right, -speed_left) : o_Drive->SetMotors(0, 0, speed_left, speed_right);
@@ -131,6 +138,7 @@ void Robot::OperatorControl(void){
 		Wait(CYCLE_TIME_DELAY);
 	}
 
+	// Stop drive motors
 	o_Drive->StopMotors();
 
 	// Stop camera
