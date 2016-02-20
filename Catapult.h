@@ -13,7 +13,7 @@ public:
 	void CheckCatapult(void); // Checks the states of the launch and intake, and their respective limit switches, to see if anything needs to be done
 
 	// Launch
-	enum LaunchState {CHARGING, READY, FIRE, RELEASE};
+	enum LaunchState {CHARGING, READY, FIRE};
 	void SetLaunchState(LaunchState);
 
 	//Intake

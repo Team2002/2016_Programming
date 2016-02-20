@@ -42,6 +42,7 @@ void Robot::Autonomous(void){
 
 
 void Robot::OperatorControl(void){
+	//int Target_X;
 	float speed_left, speed_right;       // Drive motor speeds for manual control
 	float speed_turn, speed_linear;      // Drive motor speeds for auto target tracking
 	bool reverse = false;                // Keeps track of robot being in reverse mode
@@ -65,6 +66,14 @@ void Robot::OperatorControl(void){
 
 			// Get targets coordinates from the network table (return empty vector if network table is unreachable)
 			coord = o_NetworkTable->GetNumberArray("BLOBS", std::vector<double>());
+
+			// Set Target_X coordinate to either close range or long range
+			/*if (USE_DEFAULT_TARGET_X)
+				Target_X = TARGET_X;
+			else if(fabs(CLOSE_RANGE_TARGET_X - coord[0]) < fabs(LONG_RANGE_TARGET_X - coord[0]))
+				Target_X = CLOSE_RANGE_TARGET_X;
+			else
+				Target_X = LONG_RANGE_TARGET_X;*/
 
 			// Make sure the network table returned values
 			if(!coord.empty()){

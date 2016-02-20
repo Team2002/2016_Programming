@@ -44,7 +44,7 @@ const int JOYSTICK_BUTTON_INTAKE_UP = 1;
 // Catapult
 const float INTAKE_MOTOR_SPEED = 0.5; // Speed to run intake motor when intaking boulders
 const float LAUNCH_MOTOR_SPEED = 1; // Speed to run the launcher motor when charging
-const float RELEASE_TIME_DELAY = 2; // Time to wait when releasing the launch after the limit switch is triggered to be sure the launch is released
+const float RELEASE_TIME_DELAY = 2; // Time to wait when releasing the launch, after the limit switch is triggered, to be sure the launch is released
 
 
 // Camera Settings
@@ -52,10 +52,13 @@ const char CAMERA_NAME[] = "cam0\0"; // Found in RoboRio web interface
 const int CAMERA_RES_X = 640;
 const int CAMERA_RES_Y = 480;
 const int CAMERA_FPS = 10;
-const unsigned int CAMERA_EXPOSURE = 20; // 0-100
+const unsigned int CAMERA_EXPOSURE = 0;
 
 
 // Target Tracking
+/*const bool USE_DEFAULT_TARGET_X = true;
+const int CLOSE_RANGE_TARGET_X = 480; // CHANGE WHEN WE KNOW FOR SURE!!!
+const int LONG_RANGE_TARGET_X = 160; // CHANGE WHEN WE KNOW FOR SURE!!!*/
 const int TARGET_X = 320; // Target x coordinate
 const int TARGET_Y = 240; // Target y coordinate
 const float CENTERED_THRESHOLD = 0.08; // Threshold for considering the target centered (CENTERED_THRESHOLD * RES_X/RES_Y = pixels target can be off)

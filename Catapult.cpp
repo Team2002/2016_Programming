@@ -14,7 +14,7 @@ Catapult::Catapult(void){
 	// Default states
 	launchCurrentState = CHARGING; // Set the catapult to start charging ASAP
 
-	intakeSolenoid->Set(DoubleSolenoid::kForward); // Set the intake to start down so the catapult can charge
+	intakeSolenoid->Set(DoubleSolenoid::kForward); // Set the intake to start in the down position, so that the catapult can charge
 	intakeCurrentState = DOWN;
 }
 
@@ -49,15 +49,6 @@ void Catapult::CheckCatapult(void){
 				launchCurrentState = CHARGING;
 			}
 			break;
-
-		case RELEASE:
-			if(launchLimitSwitch->Get()){
-				launchMotor->Set(LAUNCH_MOTOR_SPEED);
-			}else{
-				Wait(RELEASE_TIME_DELAY);
-				launchMotor->Set(0);
-			}
-			break;
 	}
 
 	switch(intakeCurrentState){
@@ -81,8 +72,8 @@ void Catapult::SetLaunchState(LaunchState state){
 	if(state == CHARGING || state == READY) // Don't allow the launch state to be changed to these values (reserved for class use)
 		return;
 
-	if((state == FIRE || state == RELEASE) && launchCurrentState == READY) // Only allow launch state to be changed to FIRE or RELEASE if it is currently READY
-		launchCurrentState = state;
+	if(state == FIRE && launchCurrentState == READY && intakeCurrentState == DOWN) // Only allow launch state to be changed to FIRE if it is currently READY and the intake is DOWN
+		launchCurrentState = FIRE;
 }
 
 
