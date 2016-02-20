@@ -16,7 +16,7 @@ public:
 	void StopMotors(void);
 	
 private:
-	Talon *FrontLeft, *FrontRight, *BackLeft, *BackRight;
+	Talon *frontLeft, *frontRight, *backLeft, *backRight;
 };
 
 

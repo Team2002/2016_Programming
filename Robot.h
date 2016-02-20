@@ -6,6 +6,7 @@
 #include "NetworkTables/NetworkTable.h"
 #include "Config.h"
 #include "Drive.h"
+#include "Catapult.h"
 
 
 class Robot: public SampleRobot{
@@ -14,7 +15,6 @@ public:
 	~Robot(void);
 
 	void RobotInit(void);
-	void Test(void);
 	void Autonomous(void);
 	void OperatorControl(void);
 
@@ -23,11 +23,12 @@ private:
 
 	Joystick* o_Joystick;
 	Drive* o_Drive;
+	Catapult* o_Catapult;
 
 	// For vision tracking
 	USBCamera *o_USBCamera;
 	Image *o_Image;
-	NetworkTable* table;
+	NetworkTable* o_NetworkTable;
 };
 
 

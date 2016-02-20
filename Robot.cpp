@@ -4,21 +4,25 @@
 #include "NetworkTables/NetworkTable.h"
 #include "Config.h"
 #include "Drive.h"
+#include "Catapult.h"
 
 
 Robot::Robot(void){
-	o_Joystick = new Joystick(JOYSTICK_PORT);
+	o_Joystick = new Joystick(PORT_JOYSTICK);
 	o_Drive = new Drive();
+	o_Catapult = new Catapult();
 
 	o_USBCamera = new USBCamera(CAMERA_NAME, true);
 	o_Image = imaqCreateImage(IMAQ_IMAGE_RGB, 0);
-	table = &*NetworkTable::GetTable("datatable"); // GetTable returns a shared pointer, so referencing and dereferencing converts it to a raw pointer
+	o_NetworkTable = &*NetworkTable::GetTable("datatable"); // GetTable returns a shared pointer, so referencing and dereferencing converts it to a raw pointer
 }
 
 
 Robot::~Robot(void){
 	delete o_Joystick;
 	delete o_Drive;
+	delete o_Catapult;
+
 	delete o_USBCamera;
 }
 
@@ -29,25 +33,6 @@ void Robot::RobotInit(void){
 	o_USBCamera->SetSize(CAMERA_RES_X, CAMERA_RES_Y);
 	o_USBCamera->SetExposureManual(CAMERA_EXPOSURE);
 	o_USBCamera->UpdateSettings();
-}
-
-
-// Use test mode for testing individual motors and pistons
-void Robot::Test(void){
-	while(IsTest() && IsEnabled()){ // Loop while still in test mode
-		if(o_Joystick->GetRawButton(TEST_JOYSTICK_BUTTON_FRONTLEFT))       // Front left drive motor
-			o_Drive->SetMotors(TEST_SPEED, 0, 0, 0);
-		else if(o_Joystick->GetRawButton(TEST_JOYSTICK_BUTTON_FRONTRIGHT)) // Front right drive motor
-			o_Drive->SetMotors(0, TEST_SPEED, 0, 0);
-		else if(o_Joystick->GetRawButton(TEST_JOYSTICK_BUTTON_BACKLEFT))   // Back left drive motor
-			o_Drive->SetMotors(0, 0, TEST_SPEED, 0);
-		else if(o_Joystick->GetRawButton(TEST_JOYSTICK_BUTTON_BACKRIGHT))  // Back right drive motor
-			o_Drive->SetMotors(0, 0, 0, TEST_SPEED);
-		else
-			o_Drive->StopMotors();
-	}
-
-	o_Drive->StopMotors();
 }
 
 
@@ -63,10 +48,8 @@ void Robot::OperatorControl(void){
 	bool reverse_button_pressed = false; // Needed for toggling reverse mode
 	std::vector<double> coord;           // Target coordinates sent from RoboRealm
 
-	// Update camera settings
+	// Update camera settings and start camera
 	o_USBCamera->UpdateSettings();
-
-	// Start camera
 	o_USBCamera->OpenCamera();
 	o_USBCamera->StartCapture();
 
@@ -81,7 +64,7 @@ void Robot::OperatorControl(void){
 		if(o_Joystick->GetRawButton(JOYSTICK_BUTTON_TRACK_TARGET)){
 
 			// Get targets coordinates from the network table (return empty vector if network table is unreachable)
-			coord = table->GetNumberArray("BLOBS", std::vector<double>());
+			coord = o_NetworkTable->GetNumberArray("BLOBS", std::vector<double>());
 
 			// Make sure the network table returned values
 			if(!coord.empty()){
@@ -104,7 +87,7 @@ void Robot::OperatorControl(void){
 						o_Drive->SetMotors(-speed_linear, -speed_linear);
 					else
 						o_Drive->StopMotors();
-						// LAUNCH BOULDER
+						o_Catapult->SetLaunchState(Catapult::FIRE);
 				}
 			}
 
@@ -116,6 +99,7 @@ void Robot::OperatorControl(void){
 
 		// Manual driver control
 		else{
+
 			// Get joystick values (negated because the stupid driver station reads them that way)
 			speed_left = -o_Joystick->GetRawAxis(JOYSTICK_AXIS_LEFT);
 			speed_right = -o_Joystick->GetRawAxis(JOYSTICK_AXIS_RIGHT);
@@ -132,7 +116,20 @@ void Robot::OperatorControl(void){
 				reverse ? o_Drive->SetMotors(-speed_right, -speed_left) : o_Drive->SetMotors(speed_left, speed_right);
 			else
 				reverse ? o_Drive->SetMotors(0, 0, -speed_right, -speed_left) : o_Drive->SetMotors(0, 0, speed_left, speed_right);
+
+			// Boulder intanke
+			if(o_Joystick->GetRawButton(JOYSTICK_BUTTON_INTAKE_DOWN))
+				o_Catapult->SetIntakeState(Catapult::DOWN);
+			if(o_Joystick->GetRawButton(JOYSTICK_BUTTON_INTAKE_UP))
+				o_Catapult->SetIntakeState(Catapult::UP);
+
+			// Fire boulder
+			if(o_Joystick->GetRawButton(JOYSTICK_BUTTON_FIRE_BOULDER))
+				o_Catapult->SetLaunchState(Catapult::FIRE);
 		}
+
+		// Check if the catapult needs to do anything
+		o_Catapult->CheckCatapult();
 
 		// Wait until next cycle (to prevent needless CPU usage)
 		Wait(CYCLE_TIME_DELAY);
