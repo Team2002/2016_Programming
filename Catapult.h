@@ -22,14 +22,15 @@ public:
 
 private:
 	// Launch
-	Talon* launchMotor;
-	DigitalInput* launchLimitSwitch;
+	Talon* oLaunchMotor;
+	Encoder* oLaunchEncoder;
+	DigitalInput* oLaunchLimitSwitch;
 	LaunchState launchCurrentState;
 
 	// Intake
-	Talon* intakeMotor;
-	DoubleSolenoid* intakeSolenoid;
-	DigitalInput* intakeLimitSwitch;
+	Talon* oIntakeMotor;
+	DoubleSolenoid* oIntakeSolenoid;
+	DigitalInput* oIntakeLimitSwitch;
 	IntakeState intakeCurrentState;
 };
 

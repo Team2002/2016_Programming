@@ -2,30 +2,45 @@
 #define CONFIG_H__INCLUDED
 
 
-// Ports
-const int PORT_JOYSTICK = 0; // Joysticks (found in Driver Station)
+// Driver Station Ports
+const int PORT_JOYSTICK = 0; // Joysticks
 
-const int PORT_DRIVE_TALON_FRONTLEFT = 0; // Talons
-const int PORT_DRIVE_TALON_FRONTRIGHT = 0;
+// PWM Ports
+const int PORT_DRIVE_TALON_FRONTLEFT = 1; // Talons (Motor Controllers)
+const int PORT_DRIVE_TALON_FRONTRIGHT = 3;
 const int PORT_DRIVE_TALON_BACKLEFT = 0;
-const int PORT_DRIVE_TALON_BACKRIGHT = 0;
-const int PORT_INTAKE_TALON = 0;
-const int PORT_LAUNCH_TALON = 0;
+const int PORT_DRIVE_TALON_BACKRIGHT = 2;
+const int PORT_LAUNCH_TALON = 5;
+const int PORT_INTAKE_TALON = 4;
+const int PORT_LIFT_TALON_UP = 6;
+const int PORT_LIFT_TALON_DOWN = 7;
 
-const int PORT_INTAKE_SOLENOID_1 = 0; // Solenoids
-const int PORT_INTAKE_SOLENOID_2 = 0;
+// DIO Ports
+const int PORT_LAUNCH_ENCODER_1 = 2; // Encoders
+const int PORT_LAUNCH_ENCODER_2 = 3;
 
 const int PORT_LAUNCH_LIMIT_SWITCH = 0; // Limit Switches
-const int PORT_INTAKE_LIMIT_SWITCH = 0;
+const int PORT_INTAKE_LIMIT_SWITCH = 1;
+
+// PCM Ports
+const int PORT_INTAKE_SOLENOID_1 = 5; // Solenoids
+const int PORT_INTAKE_SOLENOID_2 = 4;
+const int PORT_LIFT_SOLENOID_1 = 0;
+const int PORT_LIFT_SOLENOID_2 = 1;
+
+// Relay Ports
+const int PORT_RELAY_RED = 0; // Spike H-Bridge Relays (for LEDs)
+const int PORT_RELAY_GREEN = 1;
+const int PORT_RELAY_BLUE = 2;
 
 
 // Motor Reversal
-const bool DRIVE_MOTOR_FRONTLEFT_REVERSED = false; // Drive Train
+const bool DRIVE_MOTOR_FRONTLEFT_REVERSED = true; // Drive Train
 const bool DRIVE_MOTOR_FRONTRIGHT_REVERSED = false;
-const bool DRIVE_MOTOR_BACKLEFT_REVERSED = false;
+const bool DRIVE_MOTOR_BACKLEFT_REVERSED = true;
 const bool DRIVE_MOTOR_BACKRIGHT_REVERSED = false;
 
-const bool INTAKE_MOTOR_REVERSED = false; // Catapult
+const bool INTAKE_MOTOR_REVERSED = true; // Catapult
 const bool LAUNCH_MOTOR_REVERSED = true;
 
 
@@ -34,17 +49,18 @@ const int JOYSTICK_AXIS_LEFT = 1; // Axes
 const int JOYSTICK_AXIS_RIGHT = 3;
 
 const int JOYSTICK_BUTTON_REVERSE = 4; // Buttons
-const int JOYSTICK_BUTTON_LOCK_TURNING = 6;
 const int JOYSTICK_BUTTON_TRACK_TARGET = 5;
 const int JOYSTICK_BUTTON_FIRE_BOULDER = 3;
-const int JOYSTICK_BUTTON_INTAKE_DOWN = 2;
+const int JOYSTICK_BUTTON_INTAKE_DOWN = 6;
 const int JOYSTICK_BUTTON_INTAKE_UP = 1;
+
+const int JOYSTICK_POV_LOCK_TURNING = 6; // POV
+const int JOYSTICK_POV_FIRE_BOULDER_SAFETY = 2;
 
 
 // Catapult
-const float INTAKE_MOTOR_SPEED = 0.5; // Speed to run intake motor when intaking boulders
+const float INTAKE_MOTOR_SPEED = 0.75; // Speed to run intake motor when intaking boulders
 const float LAUNCH_MOTOR_SPEED = 1; // Speed to run the launcher motor when charging
-const float RELEASE_TIME_DELAY = 2; // Time to wait when releasing the launch, after the limit switch is triggered, to be sure the launch is released
 
 
 // Camera Settings
@@ -56,9 +72,6 @@ const unsigned int CAMERA_EXPOSURE = 0;
 
 
 // Target Tracking
-/*const bool USE_DEFAULT_TARGET_X = true;
-const int CLOSE_RANGE_TARGET_X = 480; // CHANGE WHEN WE KNOW FOR SURE!!!
-const int LONG_RANGE_TARGET_X = 160; // CHANGE WHEN WE KNOW FOR SURE!!!*/
 const int TARGET_X = 320; // Target x coordinate
 const int TARGET_Y = 240; // Target y coordinate
 const float CENTERED_THRESHOLD = 0.08; // Threshold for considering the target centered (CENTERED_THRESHOLD * RES_X/RES_Y = pixels target can be off)

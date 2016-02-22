@@ -1,42 +1,34 @@
 #include "Drive.h"
-#include "WPILib.h"
 #include "Config.h"
 
 
 Drive::Drive(void){
-	frontLeft = new Talon(PORT_DRIVE_TALON_FRONTLEFT);
-	frontRight = new Talon(PORT_DRIVE_TALON_FRONTRIGHT);
-	backLeft = new Talon(PORT_DRIVE_TALON_BACKLEFT);
-	backRight = new Talon(PORT_DRIVE_TALON_BACKRIGHT);
+	oFrontLeft = new Talon(PORT_DRIVE_TALON_FRONTLEFT);
+	oFrontRight = new Talon(PORT_DRIVE_TALON_FRONTRIGHT);
+	oBackLeft = new Talon(PORT_DRIVE_TALON_BACKLEFT);
+	oBackRight = new Talon(PORT_DRIVE_TALON_BACKRIGHT);
 }
 
 
 Drive::~Drive(void){
-	delete frontLeft;
-	delete frontRight;
-	delete backLeft;
-	delete backRight;
+	delete oFrontLeft;
+	delete oFrontRight;
+	delete oBackLeft;
+	delete oBackRight;
 }
 
 
 void Drive::SetMotors(float left, float right){
-	DRIVE_MOTOR_FRONTLEFT_REVERSED ? frontLeft->Set(-left) : frontLeft->Set(left);
-	DRIVE_MOTOR_FRONTRIGHT_REVERSED ? frontRight->Set(-right) : frontRight->Set(right);
-	DRIVE_MOTOR_BACKLEFT_REVERSED ? backLeft->Set(-left) : backLeft->Set(left);
-	DRIVE_MOTOR_BACKRIGHT_REVERSED ? backRight->Set(-right) : backRight->Set(right);
-}
-
-void Drive::SetMotors(float front_left, float front_right, float back_left, float back_right){
-	DRIVE_MOTOR_FRONTLEFT_REVERSED ? frontLeft->Set(-front_left) : frontLeft->Set(front_left);
-	DRIVE_MOTOR_FRONTRIGHT_REVERSED ? frontRight->Set(-front_right) : frontRight->Set(front_right);
-	DRIVE_MOTOR_BACKLEFT_REVERSED ? backLeft->Set(-back_left) : backLeft->Set(back_left);
-	DRIVE_MOTOR_BACKRIGHT_REVERSED ? backRight->Set(-back_right) : backRight->Set(back_right);
+	DRIVE_MOTOR_FRONTLEFT_REVERSED ? oFrontLeft->Set(-left) : oFrontLeft->Set(left);
+	DRIVE_MOTOR_FRONTRIGHT_REVERSED ? oFrontRight->Set(-right) : oFrontRight->Set(right);
+	DRIVE_MOTOR_BACKLEFT_REVERSED ? oBackLeft->Set(-left) : oBackLeft->Set(left);
+	DRIVE_MOTOR_BACKRIGHT_REVERSED ? oBackRight->Set(-right) : oBackRight->Set(right);
 }
 
 
 void Drive::StopMotors(void){
-	frontLeft->Set(0);
-	frontRight->Set(0);
-	backLeft->Set(0);
-	backRight->Set(0);
+	oFrontLeft->Set(0);
+	oFrontRight->Set(0);
+	oBackLeft->Set(0);
+	oBackRight->Set(0);
 }

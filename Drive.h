@@ -3,7 +3,6 @@
 
 
 #include "WPILib.h"
-#include "Config.h"
 
 
 class Drive{
@@ -12,11 +11,10 @@ public:
 	~Drive(void);
 	
 	void SetMotors(float, float);
-	void SetMotors(float, float, float, float);
 	void StopMotors(void);
 	
 private:
-	Talon *frontLeft, *frontRight, *backLeft, *backRight;
+	Talon *oFrontLeft, *oFrontRight, *oBackLeft, *oBackRight;
 };
 
 

@@ -1,4 +1,4 @@
-<head><version>2.79.21</version></head>
+<head><version>2.79.23</version></head>
 <FRC_CameraClient>
   <address>10.20.2.101</address>
   <compression>5</compression>
@@ -8,13 +8,15 @@
   <resolution>0</resolution>
   <running>1</running>
 </FRC_CameraClient>
-<Adaptive_Threshold>
-  <channel_type>1</channel_type>
-  <filter_size>100</filter_size>
-  <max_threshold>255</max_threshold>
-  <mean_offset>-50</mean_offset>
-  <min_threshold>50</min_threshold>
-</Adaptive_Threshold>
+<Color_Threshold>
+  <blue_end>50</blue_end>
+  <blue_start>0</blue_start>
+  <green_end>100</green_end>
+  <green_start>50</green_start>
+  <red_end>50</red_end>
+  <red_start>0</red_start>
+  <result_type>1</result_type>
+</Color_Threshold>
 <Blob_Filter>
   <create_blob_array_variable>FALSE</create_blob_array_variable>
   <filters>
@@ -43,7 +45,7 @@
 </Blob_Filter>
 <Marker>
   <include_graphics>0</include_graphics>
-  <name>convex_hull NOT added</name>
+  <name>Convex Hull NOT added</name>
   <revert_to>Current</revert_to>
 </Marker>
 <Convex_Hull/>
@@ -106,13 +108,18 @@
   <sort_array_on_y>FALSE</sort_array_on_y>
 </Blob_Filter>
 <Blob_Replace>
-  <color_index>5</color_index>
+  <color_index>8</color_index>
   <fill_shape>FALSE</fill_shape>
   <order_array_on_x>FALSE</order_array_on_x>
   <order_array_on_y>FALSE</order_array_on_y>
   <overlay_image>Source</overlay_image>
-  <thickness>5</thickness>
+  <thickness>3</thickness>
 </Blob_Replace>
+<Marker>
+  <include_graphics>0</include_graphics>
+  <name>End</name>
+  <revert_to>Current</revert_to>
+</Marker>
 <NetworkTables>
   <delay>100</delay>
   <filter_type_index>0</filter_type_index>

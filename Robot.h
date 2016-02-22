@@ -4,9 +4,10 @@
 
 #include "WPILib.h"
 #include "NetworkTables/NetworkTable.h"
-#include "Config.h"
 #include "Drive.h"
 #include "Catapult.h"
+#include "Lift.h"
+#include "LED.h"
 
 
 class Robot: public SampleRobot{
@@ -21,14 +22,19 @@ public:
 private:
 	void ToggleBool(bool, bool&, bool&);
 
-	Joystick* o_Joystick;
-	Drive* o_Drive;
-	Catapult* o_Catapult;
+	Joystick* oJoystick; // Appending "o" to avoid naming conflicts ("o" for object)
+	Compressor* oCompressor;
+	PowerDistributionPanel* oPDP;
+	LED* oLED;
+	Drive* oDrive;
+	Catapult* oCatapult;
+	Lift* oLift;
 
 	// For vision tracking
-	USBCamera *o_USBCamera;
-	Image *o_Image;
-	NetworkTable* o_NetworkTable;
+	USBCamera *oUSBCamera;
+	Image *oImage;
+	NetworkTable* oNetworkTable;
+
 };
 
 

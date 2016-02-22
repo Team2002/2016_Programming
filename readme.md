@@ -8,7 +8,10 @@ Main program. All other classes are included into here.<br/>
 Controls the robot's drive train.<br/>
 
 <strong>Catapult.cpp / Catapult.h</strong><br/>
-Controls the robot's catapult and intake mechanism.<br/>
+Controls the robot's launch and intake mechanism.<br/>
+
+<strong>Lift.cpp / Lift.h</strong><br/>
+Controls the robot's hanging arm.<br/>
 <br/>
 
 <strong>RoboRealm Configuration</strong><br/>

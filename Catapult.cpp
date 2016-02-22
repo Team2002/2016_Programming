@@ -1,70 +1,77 @@
 #include "Catapult.h"
-#include "WPILib.h"
 #include "Config.h"
 
 
 Catapult::Catapult(void){
-	launchMotor = new Talon(PORT_LAUNCH_TALON);
-	launchLimitSwitch = new DigitalInput(PORT_LAUNCH_LIMIT_SWITCH);
+	oLaunchMotor = new Talon(PORT_LAUNCH_TALON);
+	oLaunchEncoder = new Encoder(PORT_LAUNCH_ENCODER_1, PORT_LAUNCH_ENCODER_2, false, Encoder::EncodingType::k4X);
+	oLaunchLimitSwitch = new DigitalInput(PORT_LAUNCH_LIMIT_SWITCH);
 
-	intakeMotor = new Talon(PORT_INTAKE_TALON);
-	intakeSolenoid = new DoubleSolenoid(PORT_INTAKE_SOLENOID_1,PORT_INTAKE_SOLENOID_2);
-	intakeLimitSwitch = new DigitalInput(PORT_INTAKE_LIMIT_SWITCH);
+	oIntakeMotor = new Talon(PORT_INTAKE_TALON);
+	oIntakeSolenoid = new DoubleSolenoid(PORT_INTAKE_SOLENOID_1,PORT_INTAKE_SOLENOID_2);
+	oIntakeLimitSwitch = new DigitalInput(PORT_INTAKE_LIMIT_SWITCH);
 
 	// Default states
 	launchCurrentState = CHARGING; // Set the catapult to start charging ASAP
-
-	intakeSolenoid->Set(DoubleSolenoid::kForward); // Set the intake to start in the down position, so that the catapult can charge
-	intakeCurrentState = DOWN;
+	intakeCurrentState = DOWN; // Set the intake to start in the down position, so that the catapult can charge
 }
 
 
 Catapult::~Catapult(void){
-	delete launchMotor;
-	delete launchLimitSwitch;
+	delete oLaunchMotor;
+	delete oLaunchEncoder;
+	delete oLaunchLimitSwitch;
 
-	delete intakeMotor;
-	delete intakeSolenoid;
-	delete intakeLimitSwitch;
+	delete oIntakeMotor;
+	delete oIntakeSolenoid;
+	delete oIntakeLimitSwitch;
 }
 
 
 void Catapult::CheckCatapult(void){
+
+
+	SmartDashboard::PutNumber("ENCODER ", oLaunchEncoder->Get());
+
+
 	switch(launchCurrentState){
 		case CHARGING:
-			if(launchLimitSwitch->Get()){
-				launchMotor->Set(0);
+			if(oLaunchLimitSwitch->Get()){
+				oLaunchMotor->Set(0);
 				launchCurrentState = READY;
 			}else{
-				launchMotor->Set(LAUNCH_MOTOR_SPEED);
+				LAUNCH_MOTOR_REVERSED ? oLaunchMotor->Set(-LAUNCH_MOTOR_SPEED) : oLaunchMotor->Set(LAUNCH_MOTOR_SPEED);
 			}
 			break;
 
 		case READY: break;
 
 		case FIRE:
-			if(launchLimitSwitch->Get()){
-				launchMotor->Set(LAUNCH_MOTOR_SPEED);
+			if(oIntakeLimitSwitch->Get()){ // Only fire if the intake is down. Checks the limit switch because it takes some ammount of time for the piston to physically actuate.
+				if(oLaunchLimitSwitch->Get())
+					LAUNCH_MOTOR_REVERSED ? oLaunchMotor->Set(-LAUNCH_MOTOR_SPEED) : oLaunchMotor->Set(LAUNCH_MOTOR_SPEED);
+				else
+					launchCurrentState = CHARGING;
 			}else{
-				launchCurrentState = CHARGING;
+				intakeCurrentState = DOWN;
 			}
 			break;
 	}
 
 	switch(intakeCurrentState){
 		case UP:
-			intakeSolenoid->Set(DoubleSolenoid::kReverse);
+			oIntakeSolenoid->Set(DoubleSolenoid::kReverse);
 			break;
 
 		case DOWN:
-			intakeSolenoid->Set(DoubleSolenoid::kForward);
+			oIntakeSolenoid->Set(DoubleSolenoid::kForward);
 			break;
 	}
 
-	if(intakeLimitSwitch->Get())
-		intakeMotor->Set(INTAKE_MOTOR_SPEED);
+	if(oIntakeLimitSwitch->Get())
+		INTAKE_MOTOR_REVERSED ? oIntakeMotor->Set(-INTAKE_MOTOR_SPEED) : oIntakeMotor->Set(INTAKE_MOTOR_SPEED);
 	else
-		intakeMotor->Set(0);
+		oIntakeMotor->Set(0);
 }
 
 
@@ -72,7 +79,7 @@ void Catapult::SetLaunchState(LaunchState state){
 	if(state == CHARGING || state == READY) // Don't allow the launch state to be changed to these values (reserved for class use)
 		return;
 
-	if(state == FIRE && launchCurrentState == READY && intakeCurrentState == DOWN) // Only allow launch state to be changed to FIRE if it is currently READY and the intake is DOWN
+	if(state == FIRE && launchCurrentState == READY) // Only allow launch state to be changed to FIRE if it is currently READY
 		launchCurrentState = FIRE;
 }
 
