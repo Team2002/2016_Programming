@@ -3,89 +3,128 @@
 
 
 Catapult::Catapult(void){
-	oLaunchMotor = new Talon(PORT_LAUNCH_TALON);
-	oLaunchEncoder = new Encoder(PORT_LAUNCH_ENCODER_1, PORT_LAUNCH_ENCODER_2, false, Encoder::EncodingType::k4X);
-	oLaunchLimitSwitch = new DigitalInput(PORT_LAUNCH_LIMIT_SWITCH);
+	oLaunchMotor = new Talon(PORT_TALON_LAUNCH);
+	oLaunchLimitSwitch = new DigitalInput(PORT_LIMIT_SWITCH_LAUNCH);
 
-	oIntakeMotor = new Talon(PORT_INTAKE_TALON);
-	oIntakeSolenoid = new DoubleSolenoid(PORT_INTAKE_SOLENOID_1,PORT_INTAKE_SOLENOID_2);
-	oIntakeLimitSwitch = new DigitalInput(PORT_INTAKE_LIMIT_SWITCH);
+	oIntakeMotor = new Talon(PORT_TALON_INTAKE);
+	oIntakeSolenoid = new DoubleSolenoid(PORT_SOLENOID_INTAKE_1,PORT_SOLENOID_INTAKE_2);
+	oIntakeLimitSwitch = new DigitalInput(PORT_LIMIT_SWITCH_INTAKE);
 
-	// Default states
-	launchCurrentState = CHARGING; // Set the catapult to start charging ASAP
-	intakeCurrentState = DOWN; // Set the intake to start in the down position, so that the catapult can charge
+	// Default states. These states will prevent the launch from moving on its own, but call SetCharging() or SetReady() before using the catapult to be sure that the states are set to what they should be.
+	launchCurrentState = READY;
+	intakeCurrentState = DOWN;
+	intakeWheelsState = OFF;
+	intakeStateChanged = false;
 }
 
 
 Catapult::~Catapult(void){
 	delete oLaunchMotor;
-	delete oLaunchEncoder;
 	delete oLaunchLimitSwitch;
-
 	delete oIntakeMotor;
 	delete oIntakeSolenoid;
 	delete oIntakeLimitSwitch;
 }
 
 
+void Catapult::SetCharging(void){
+	launchCurrentState = CHARGING;
+	intakeCurrentState = DOWN;
+
+	intakeStateChanged = true;
+}
+
+
+void Catapult::SetReady(void){
+	launchCurrentState = READY;
+	intakeCurrentState = UP;
+
+	intakeStateChanged = true;
+}
+
+
 void Catapult::CheckCatapult(void){
-
-
-	SmartDashboard::PutNumber("ENCODER ", oLaunchEncoder->Get());
-
-
+	// Launch state
 	switch(launchCurrentState){
 		case CHARGING:
 			if(oLaunchLimitSwitch->Get()){
+				Wait(0.75); // Make this a timer, rather than a wait
 				oLaunchMotor->Set(0);
 				launchCurrentState = READY;
 			}else{
-				LAUNCH_MOTOR_REVERSED ? oLaunchMotor->Set(-LAUNCH_MOTOR_SPEED) : oLaunchMotor->Set(LAUNCH_MOTOR_SPEED);
-			}
-			break;
-
-		case READY: break;
-
-		case FIRE:
-			if(oIntakeLimitSwitch->Get()){ // Only fire if the intake is down. Checks the limit switch because it takes some ammount of time for the piston to physically actuate.
-				if(oLaunchLimitSwitch->Get())
+				if(oIntakeLimitSwitch->Get()) // Only CHARGE if the intake is DOWN
 					LAUNCH_MOTOR_REVERSED ? oLaunchMotor->Set(-LAUNCH_MOTOR_SPEED) : oLaunchMotor->Set(LAUNCH_MOTOR_SPEED);
 				else
-					launchCurrentState = CHARGING;
-			}else{
-				intakeCurrentState = DOWN;
+					oLaunchMotor->Set(0);
 			}
 			break;
-	}
 
-	switch(intakeCurrentState){
-		case UP:
-			oIntakeSolenoid->Set(DoubleSolenoid::kReverse);
+		case FIRE:
+			if(oLaunchLimitSwitch->Get()){
+				if(oIntakeLimitSwitch->Get()) // Only FIRE if the intake is DOWN
+					LAUNCH_MOTOR_REVERSED ? oLaunchMotor->Set(-LAUNCH_MOTOR_SPEED) : oLaunchMotor->Set(LAUNCH_MOTOR_SPEED);
+				else
+					oLaunchMotor->Set(0);
+			}else{
+				oLaunchMotor->Set(0);
+				launchCurrentState = CHARGING;
+			}
 			break;
 
-		case DOWN:
-			oIntakeSolenoid->Set(DoubleSolenoid::kForward);
+		case READY:
+		default:
 			break;
 	}
 
-	if(oIntakeLimitSwitch->Get())
+	// Intake state
+	if(intakeStateChanged){ // Only check the solenoid state if it needs to change
+		switch(intakeCurrentState){
+			case UP:
+				oIntakeSolenoid->Set(DoubleSolenoid::kReverse);
+				break;
+
+			case DOWN:
+				oIntakeSolenoid->Set(DoubleSolenoid::kForward);
+				break;
+
+			default:
+				oIntakeSolenoid->Set(DoubleSolenoid::kOff);
+				break;
+		}
+
+		intakeStateChanged = false;
+	}
+
+	// Intake wheels
+	if(intakeWheelsState == FORWARD)
+		INTAKE_MOTOR_REVERSED ? oIntakeMotor->Set(-INTAKE_MOTOR_SPEED) : oIntakeMotor->Set(INTAKE_MOTOR_SPEED);
+	else if(intakeWheelsState == BACK)
+		INTAKE_MOTOR_REVERSED ? oIntakeMotor->Set(INTAKE_MOTOR_SPEED) : oIntakeMotor->Set(-INTAKE_MOTOR_SPEED);
+	else if(oIntakeLimitSwitch->Get())
 		INTAKE_MOTOR_REVERSED ? oIntakeMotor->Set(-INTAKE_MOTOR_SPEED) : oIntakeMotor->Set(INTAKE_MOTOR_SPEED);
 	else
 		oIntakeMotor->Set(0);
 }
 
 
+void Catapult::ForceIntakeWheels(IntakeWheels state){
+	intakeWheelsState = state;
+}
+
+
 void Catapult::SetLaunchState(LaunchState state){
-	if(state == CHARGING || state == READY) // Don't allow the launch state to be changed to these values (reserved for class use)
+	if(state == CHARGING || state == READY) // Don't allow the launch state to be changed to these values
 		return;
 
-	if(state == FIRE && launchCurrentState == READY) // Only allow launch state to be changed to FIRE if it is currently READY
+	if(state == FIRE && launchCurrentState == READY && oIntakeLimitSwitch->Get()) // Only allow the launch state to be changed to FIRE if it is currently READY and the intake is DOWN
 		launchCurrentState = FIRE;
 }
 
 
 void Catapult::SetIntakeState(IntakeState state){
-	if(state == UP && launchCurrentState == READY) // Only allow the intake to be brought up if the catapult is charged
+	intakeStateChanged = true;
+
+	if(state == UP && launchCurrentState == READY) // Only allow the intake to be brought UP if the launch state is READY
 		intakeCurrentState = UP;
 
 	if(state == DOWN)

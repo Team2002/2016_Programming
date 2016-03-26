@@ -61,6 +61,7 @@ void LED::ChangeColor(Color color){
 			break;
 
 		case Off:
+		default:
 			oRed->Set(Relay::kOff);
 			oGreen->Set(Relay::kOff);
 			oBlue->Set(Relay::kOff);

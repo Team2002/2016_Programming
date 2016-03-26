@@ -10,6 +10,9 @@ public:
 	Catapult(void);
 	~Catapult(void);
 
+	void SetCharging(void); // Puts the intake DOWN and starts CHARGING the launch
+	void SetReady(void); // Brings the intake UP ands sets the launch to READY. Use when starting the robot with the launch already charged to prevent unwanted firing.
+
 	void CheckCatapult(void); // Checks the states of the launch and intake, and their respective limit switches, to see if anything needs to be done
 
 	// Launch
@@ -19,11 +22,12 @@ public:
 	//Intake
 	enum IntakeState {UP, DOWN};
 	void SetIntakeState(IntakeState);
+	enum IntakeWheels {FORWARD, BACK, OFF};
+	void ForceIntakeWheels(IntakeWheels);
 
 private:
 	// Launch
 	Talon* oLaunchMotor;
-	Encoder* oLaunchEncoder;
 	DigitalInput* oLaunchLimitSwitch;
 	LaunchState launchCurrentState;
 
@@ -32,6 +36,8 @@ private:
 	DoubleSolenoid* oIntakeSolenoid;
 	DigitalInput* oIntakeLimitSwitch;
 	IntakeState intakeCurrentState;
+	IntakeWheels intakeWheelsState;
+	bool intakeStateChanged; // Used to be sure the intake solenoid only changes states if it needs to
 };
 
 

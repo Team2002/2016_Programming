@@ -3,10 +3,10 @@
 
 
 Drive::Drive(void){
-	oFrontLeft = new Talon(PORT_DRIVE_TALON_FRONTLEFT);
-	oFrontRight = new Talon(PORT_DRIVE_TALON_FRONTRIGHT);
-	oBackLeft = new Talon(PORT_DRIVE_TALON_BACKLEFT);
-	oBackRight = new Talon(PORT_DRIVE_TALON_BACKRIGHT);
+	oFrontLeft = new Talon(PORT_TALON_DRIVE_FRONTLEFT);
+	oFrontRight = new Talon(PORT_TALON_DRIVE_FRONTRIGHT);
+	oBackLeft = new Talon(PORT_TALON_DRIVE_BACKLEFT);
+	oBackRight = new Talon(PORT_TALON_DRIVE_BACKRIGHT);
 }
 
 
@@ -19,10 +19,10 @@ Drive::~Drive(void){
 
 
 void Drive::SetMotors(float left, float right){
-	DRIVE_MOTOR_FRONTLEFT_REVERSED ? oFrontLeft->Set(-left) : oFrontLeft->Set(left);
-	DRIVE_MOTOR_FRONTRIGHT_REVERSED ? oFrontRight->Set(-right) : oFrontRight->Set(right);
-	DRIVE_MOTOR_BACKLEFT_REVERSED ? oBackLeft->Set(-left) : oBackLeft->Set(left);
-	DRIVE_MOTOR_BACKRIGHT_REVERSED ? oBackRight->Set(-right) : oBackRight->Set(right);
+	DRIVE_MOTOR_FRONTLEFT_REVERSED ? oFrontLeft->Set(-left * LEFT_MOTOR_MULTIPLIER) : oFrontLeft->Set(left * LEFT_MOTOR_MULTIPLIER);
+	DRIVE_MOTOR_FRONTRIGHT_REVERSED ? oFrontRight->Set(-right * RIGHT_MOTOR_MULTIPLIER) : oFrontRight->Set(right * RIGHT_MOTOR_MULTIPLIER);
+	DRIVE_MOTOR_BACKLEFT_REVERSED ? oBackLeft->Set(-left * LEFT_MOTOR_MULTIPLIER) : oBackLeft->Set(left * LEFT_MOTOR_MULTIPLIER);
+	DRIVE_MOTOR_BACKRIGHT_REVERSED ? oBackRight->Set(-right * RIGHT_MOTOR_MULTIPLIER) : oBackRight->Set(right * RIGHT_MOTOR_MULTIPLIER);
 }
 
 

@@ -8,44 +8,42 @@
   <resolution>0</resolution>
   <running>1</running>
 </FRC_CameraClient>
+<Display_Rectangle>
+  <clear_image>0</clear_image>
+  <color_index>green</color_index>
+  <display_as_annotation>1</display_as_annotation>
+  <display_mode_index>0</display_mode_index>
+  <fill_shape>0</fill_shape>
+  <thickness>3</thickness>
+  <xy_list_map/>
+  <x_1>260</x_1>
+  <x_1_map/>
+  <x_2>360</x_2>
+  <x_2_map/>
+  <x_3>360</x_3>
+  <x_3_map/>
+  <x_4>260</x_4>
+  <x_4_map/>
+  <y_1>380</y_1>
+  <y_1_map/>
+  <y_2>380</y_2>
+  <y_2_map/>
+  <y_3>450</y_3>
+  <y_3_map/>
+  <y_4>450</y_4>
+  <y_4_map/>
+</Display_Rectangle>
 <Color_Threshold>
-  <blue_end>50</blue_end>
+  <blue_end>80</blue_end>
   <blue_start>0</blue_start>
-  <green_end>100</green_end>
-  <green_start>50</green_start>
-  <red_end>50</red_end>
+  <green_end>150</green_end>
+  <green_start>80</green_start>
+  <red_end>30</red_end>
   <red_start>0</red_start>
-  <result_type>1</result_type>
 </Color_Threshold>
-<Blob_Filter>
-  <create_blob_array_variable>FALSE</create_blob_array_variable>
-  <filters>
-    <tab>
-      <filter>
-        <count_threshold>0</count_threshold>
-        <create_array>0</create_array>
-        <filter_id>8</filter_id>
-        <invert_count>0</invert_count>
-        <invert_threshold>0</invert_threshold>
-        <minimum_size>150</minimum_size>
-        <weight_threshold>0.5</weight_threshold>
-      </filter>
-    </tab>
-    <tab:2/>
-    <tab:3/>
-    <tab:4/>
-    <tab:5/>
-    <tab:6/>
-  </filters>
-  <font_size>Normal (10pt)</font_size>
-  <largest_is_background>FALSE</largest_is_background>
-  <show_weights>FALSE</show_weights>
-  <sort_array_on_x>FALSE</sort_array_on_x>
-  <sort_array_on_y>FALSE</sort_array_on_y>
-</Blob_Filter>
 <Marker>
   <include_graphics>0</include_graphics>
-  <name>Convex Hull NOT added</name>
+  <name>convex hull NOT added</name>
   <revert_to>Current</revert_to>
 </Marker>
 <Convex_Hull/>
@@ -55,7 +53,7 @@
   <divisor>1</divisor>
   <function>2</function>
   <image1>Current</image1>
-  <image2>convex_hull NOT added</image2>
+  <image2>convex hull NOT added</image2>
 </Math>
 <Blob_Filter>
   <create_blob_array_variable>TRUE</create_blob_array_variable>
@@ -108,18 +106,13 @@
   <sort_array_on_y>FALSE</sort_array_on_y>
 </Blob_Filter>
 <Blob_Replace>
-  <color_index>8</color_index>
+  <color_index>5</color_index>
   <fill_shape>FALSE</fill_shape>
   <order_array_on_x>FALSE</order_array_on_x>
   <order_array_on_y>FALSE</order_array_on_y>
   <overlay_image>Source</overlay_image>
-  <thickness>3</thickness>
+  <thickness>5</thickness>
 </Blob_Replace>
-<Marker>
-  <include_graphics>0</include_graphics>
-  <name>End</name>
-  <revert_to>Current</revert_to>
-</Marker>
 <NetworkTables>
   <delay>100</delay>
   <filter_type_index>0</filter_type_index>
